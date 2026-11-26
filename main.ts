@@ -30,3 +30,9 @@ if (LINE.length < 1 || LINE.length > 140 || LINE.trim().length === 0) {
 
 mkdirSync("/output", { recursive: true });
 writeFileSync("/output/entry.txt", LINE, "utf8");
+
+// Verify the write round-trips: the graded file must be exactly this line.
+import { readFileSync } from "node:fs";
+if (readFileSync("/output/entry.txt", "utf8") !== LINE) {
+  throw new Error("entry.txt round-trip mismatch");
+}
